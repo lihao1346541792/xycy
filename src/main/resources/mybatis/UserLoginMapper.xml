@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xycy.web.beans.UserLogin">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true"/>
+	
+    <resultMap id="BaseResultMap" type="com.xycy.web.beans.UserLogin">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="passwod" column="passwod" jdbcType="VARCHAR"/>
+        <result property="token" column="token" jdbcType="VARCHAR"/>
+        <result property="wx" column="wx" jdbcType="VARCHAR"/>
+        <result property="tokenExpireAt" column="tokenExpireAt" jdbcType="TIMESTAMP"/>
+        <result property="updAt" column="updAt" jdbcType="TIMESTAMP"/>
+        <result property="hasIdentityAuth" column="hasIdentityAuth" jdbcType="INTEGER"/>
+        <result property="hasCommunityAuth" column="hasCommunityAuth" jdbcType="INTEGER"/>
+    </resultMap>
+
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        `id`,
+        `phone`,
+        `passwod`,
+        `token`,
+        `wx`,
+        `tokenExpireAt`,
+        `updAt`,
+        `hasIdentityAuth`,
+        `hasCommunityAuth`
+	    ]]>
+	</sql>
+	
+	<select id="getUser" resultMap="BaseResultMap" parameterType="com.xycy.web.beans.UserLogin">
+	    SELECT <include refid="Base_Column_List"/>
+        FROM `user_login`
+	    <![CDATA[
+	        WHERE `phone` = #{phone} and `passwod`= #{passwod} 
+	    ]]>
+    </select>
+	
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim prefixOverrides="and">
+				<if test="id!=null"> and id = #{id}</if>
+				<if test="phone!=null and phone''"> and phone = #{phone}</if>
+				<if test="passwod!=null and passwod!=''"> and passwod = #{passwod}</if>
+				<if test="token!=null and token!=''"> and token = #{token}</if>
+				<if test="wx!=null and wx!=''"> and wx = #{wx}</if>
+				<if test="tokenExpireAt!=null"> and tokenExpireAt = #{tokenExpireAt}</if>
+				<if test="updAt!=null"> and updAt = #{updAt}</if>
+				<if test="hasIdentityAuth!=null"> and hasIdentityAuth = #{hasIdentityAuth}</if>
+				<if test="hasCommunityAuth!=null"> and hasCommunityAuth = #{hasCommunityAuth}</if>
+			</trim>
+		</where>
+		<if test="sorting != null">order by ${sorting}</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="INTEGER" parameterType="java.util.Map">
+		SELECT COUNT(id)
+		FROM `user_login`
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<select id="selectByToken" resultMap="BaseResultMap" parameterType="java.util.Map">
+	    SELECT <include refid="Base_Column_List"/>
+        FROM `user_login`
+	    <![CDATA[
+	        WHERE `token` = #{token}
+	    ]]>
+    </select>
+
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.util.Map">
+	    SELECT <include refid="Base_Column_List"/>
+        FROM `user_login`
+	    <![CDATA[
+	        WHERE `id` = #{id}
+	    ]]>
+    </select>
+    <select id="getUserBalance" resultType="java.math.BigDecimal">
+	    SELECT `balance` FROM `user_base`
+	    <![CDATA[
+	        WHERE `id` = #{id}
+	    ]]>
+    </select>
+    <select id="getUserIntegral">
+	    SELECT `integral` FROM `user_base`
+	    <![CDATA[
+	        WHERE `id` = #{id}
+	    ]]>
+    </select>
+    <update id="upBalanceOrIntegral" parameterType="java.util.Map">
+		UPDATE `user_base`
+		SET <if test="balance != null">
+				`balance` = #{balance}+`balance`
+			</if>
+			<if test="integral != null">
+				`integral` = #{integral} +`integral`
+			</if>
+		<![CDATA[
+	        WHERE `id` = #{id}
+	    ]]>
+	</update>
+    <update id="updateById" parameterType="com.xycy.web.beans.UserLogin">
+		UPDATE `user_login`
+		SET
+			`id` = #{id}
+            <if test="phone != null">
+				,`phone` = #{phone}
+			</if>
+            <if test="passwod != null">
+				,`passwod` = #{passwod}
+			</if>
+            <if test="token != null">
+				,`token` = #{token}
+			</if>
+            <if test="wx != null">
+				,`wx` = #{wx}
+			</if>
+            <if test="tokenExpireAt != null">
+				,`tokenExpireAt` = #{tokenExpireAt}
+			</if>
+            <if test="updAt != null">
+				,`updAt` = #{updAt}
+			</if>
+			<if test="hasIdentityAuth != null">
+				,`hasIdentityAuth` = #{hasIdentityAuth}
+			</if>
+			<if test="hasCommunityAuth != null">
+				,`hasCommunityAuth` = #{hasCommunityAuth}
+			</if>
+		<![CDATA[
+	        WHERE `id` = #{id}
+	    ]]>
+	</update>
+	
+	<insert id="addUser" parameterType="com.xycy.web.beans.UserLogin">
+		INSERT INTO `user_login`(
+	        `id`,
+	        `phone`,
+	        `passwod`,
+	        `token`,
+	        `wx`,
+	        `tokenExpireAt`,
+	        `updAt`,
+	        `hasIdentityAuth`,
+	        `hasCommunityAuth`
+		)
+		VALUES (
+	        #{id},
+	        #{phone},
+	        #{passwod},
+	        #{token},
+	        #{wx},
+	        #{tokenExpireAt},
+	        #{updAt},
+	        #{hasIdentityAuth},
+	        #{hasCommunityAuth}
+		)
+		<selectKey resultType="INTEGER" keyProperty="id" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+	</insert>
+	<insert id="addUserBase" parameterType="com.xycy.web.beans.UserLogin">
+		INSERT INTO `user_base`(
+	        `id`,
+	        `nick`,
+	        `logo`,
+	        `communityId`,
+	        `newAt`,
+	        `updAt`,
+	        `sex`,
+	        `integral`,
+	        `status`,
+	        `identityId`,
+	        `userId`
+		)
+		VALUES (
+	        #{id},
+	        #{nick},
+	        #{logo},
+	        #{communityId},
+	        #{newAt},
+	        #{updAt},
+	        #{sex},
+	        #{integral},
+	        #{status},
+	        #{identityId},
+	        #{id}
+		)
+		<selectKey resultType="INTEGER" keyProperty="id" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+	</insert>
+	<insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
+		<selectKey resultType="INTEGER" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		INSERT INTO `user_login`(
+	        `id`,
+	        `phone`,
+	        `passwod`,
+	        `token`,
+	        `wx`,
+	        `tokenExpireAt`,
+	        `updAt``,
+	        `hasIdentityAuth`,
+	        `hasCommunityAuth`
+		)
+		VALUES 
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+	        #{item.id},
+	        #{item.phone},
+	        #{item.passwod},
+	        #{item.token},
+	        #{item.wx},
+	        #{item.tokenExpireAt},
+	        #{item.updAt},
+	        #{item.hasIdentityAuth},
+	        #{item.hasCommunityAuth}
+		)
+		</foreach>
+	</insert>
+</mapper>

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "1",
+    "name": "系统管理",
+    "iconCls": "icon-add",
+    "href": "",
+    "children": [
+      {
+        "id": "101",
+        "name": "系统用户管理",
+        "iconCls": "icon-add",
+        "href": "/xycy/static/user/datagrid.jsp"
+      },{
+        "id": "102",
+        "name": "地址管理",
+        "iconCls": "icon-add",
+        "href": "/zgjy_lih/address/datagrid.jsp"
+      }
+    ]
+  },{
+  "id": "2",
+  "name": "用户管理",
+  "iconCls": "icon-man",
+  "href": "",
+  "children": [
+    {
+      "id": "201",
+      "name": "用户列表",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/aroundpic/datagrid.jsp"
+    },{
+      "id": "202",
+      "name": "商品轮播图管理",
+      "iconCls": "icon-filter",
+      "href": "/firstui/datagrid.jsp"
+    }
+  ]
+},{
+  "id": "3",
+  "name": "商品管理",
+  "iconCls": "icon-man",
+  "href": "",
+  "children": [
+    {
+      "id": "301",
+      "name": "商品列表",
+      "iconCls": "icon-filter",
+      "href": "/firstui/datagrid.jsp"
+    },{
+      "id": "302",
+      "name": "邮品管理",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/stampGood/datagrid.jsp"
+    }
+  ]
+},{
+  "id": "4",
+  "name": "社区管理",
+  "iconCls": "icon-man",
+  "href": "",
+  "children": [
+    {
+      "id": "401",
+      "name": "社区列表",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/stampGoodSort/datagrid.jsp"
+    },{
+      "id": "402",
+      "name": "邮票分类管理",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/stampSort/datagrid.jsp"
+    }
+  ]
+},{
+  "id": "5",
+  "name": "分销管理",
+  "iconCls": "icon-man",
+  "href": "",
+  "children": [
+    {
+      "id": "501",
+      "name": "订单详细管理",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/orders/datagrid.jsp"
+    },{
+      "id": "502",
+      "name": "订单项管理",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/orderter/datagrid.jsp"
+    }
+  ]
+},{
+  "id": "5",
+  "name": "订单管理",
+  "iconCls": "icon-man",
+  "href": "",
+  "children": [
+    {
+      "id": "501",
+      "name": "订单列表",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/ec.jsp"
+    },{
+      "id": "502",
+      "name": "图片统计",
+      "iconCls": "icon-filter",
+      "href": "/zgjy_lih/ec1.jsp"
+    }
+  ]
+}]

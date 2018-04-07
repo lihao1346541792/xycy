@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xycy.web.beans.MallProduct">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" readOnly="true" />
+
+	<resultMap id="BaseResultMap" type="com.xycy.web.beans.MallProduct">
+		<result property="id" column="id" jdbcType="INTEGER" />
+		<result property="name" column="name" jdbcType="VARCHAR" />
+		<result property="brandId" column="brandId" jdbcType="INTEGER" />
+		<result property="supplierId" column="supplierId" jdbcType="INTEGER" />
+		<result property="categoryId" column="categoryId" jdbcType="VARCHAR" />
+		<result property="shopId" column="shopId" jdbcType="INTEGER" />
+		<result property="unit" column="unit" jdbcType="VARCHAR" />
+		<result property="stock" column="stock" jdbcType="INTEGER" />
+		<result property="saleCount" column="saleCount" jdbcType="INTEGER" />
+		<result property="price" column="price" jdbcType="DECIMAL" />
+		<result property="marketPrice" column="marketPrice" jdbcType="DECIMAL" />
+		<result property="img" column="img" jdbcType="VARCHAR" />
+		<result property="resume" column="resume" jdbcType="VARCHAR" />
+		<result property="resumeImg" column="resumeImg" jdbcType="VARCHAR" />
+		<result property="feature" column="feature" jdbcType="VARCHAR" />
+		<result property="pv" column="pv" jdbcType="INTEGER" />
+		<result property="isRecommend" column="isRecommend" jdbcType="INTEGER" />
+		<result property="recommendOidx" column="recommendOidx" jdbcType="INTEGER" />
+		<result property="status" column="status" jdbcType="INTEGER" />
+		<result property="statusAt" column="statusAt" jdbcType="TIMESTAMP" />
+		<result property="newAt" column="newAt" jdbcType="TIMESTAMP" />
+		<result property="updAt" column="updAt" jdbcType="TIMESTAMP" />
+		<result property="feedbackCount" column="feedbackCount" jdbcType="INTEGER" />
+		<result property="subtitle" column="subtitle" jdbcType="VARCHAR" />
+		<result property="isAllNew" column="isAllNew" jdbcType="INTEGER" />
+		<result property="brandName" column="brandName" jdbcType="VARCHAR" />
+		<result property="concernCount" column="concernCount" jdbcType="INTEGER" />
+		<result property="discoverRecommend" column="discoverRecommend" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        `id`,
+        `name`,
+        `brandId`,
+        `supplierId`,
+        `categoryId`,
+        `shopId`,
+        `unit`,
+        `stock`,
+        `saleCount`,
+        `price`,
+        `marketPrice`,
+        `img`,
+        `resume`,
+        `resumeImg`,
+        `feature`,
+        `pv`,
+        `isRecommend`,
+        `recommendOidx`,
+        `status`,
+        `statusAt`,
+        `newAt`,
+        `updAt`,
+        `feedbackCount`,
+        `subtitle`,
+        `brandName`,
+        `isAllNew`,
+        `concernCount`,
+        `discoverRecommend`
+	    ]]>
+	</sql>
+
+	<select id="getMallProduct" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT * FROM `mall_product` where `status`=2 
+		<if test="orderby==1">ORDER BY price</if>
+		<if test="orderby==2">ORDER BY saleCount</if>
+	</select>
+	
+	<select id="searchMallProduct" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT * FROM `mall_product` where `status`=2 and `name` like CONCAT('%','${name}','%' )
+	</select>
+	
+	<select id="getMallProductDetail" resultMap="BaseResultMap">
+		SELECT * FROM `mall_product` where `id`=#{id} and `status`=2
+	</select>
+	
+	<select id="getShoppingCart" resultMap="BaseResultMap">
+		SELECT * FROM `mall_cart` where `creatorId`=#{creatorId} and `status`=1
+	</select>
+	
+	<insert id="addShoppingCart" parameterType="com.xycy.web.beans.MallCart">
+		INSERT INTO `mall_cart`(
+	        `id`,
+	        `creatorId`,
+	        `productId`,
+	        `quantity`,
+	        `newAt`,
+	        `updAt`,
+	        `productSpecId`,
+	        `status`,
+	        `stock`
+		)
+		VALUES (
+	        #{id},
+	        #{creatorId},
+	        #{productId},
+	        #{quantity},
+	        #{newAt},
+	        #{updAt},
+	        #{productSpecId},
+	        #{status},
+	        #{stock}
+		)
+		<selectKey resultType="INTEGER" keyProperty="id" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+	</insert>
+</mapper>
